@@ -97,6 +97,8 @@ scatter_data = px.scatter_mapbox(
     width=750,
     height=600
 ).data
+for sd in scatter_data:
+    fig3.add_trace(sd)
 ```
 
 # 기말고사1-(1),(2)
@@ -115,11 +117,6 @@ fig2.show()
 
 ```{python}
 #| title: 속력별 경로 시각화
-for sd in scatter_data:
-    fig3.add_trace(sd)
-fig3.update_traces(
-    line={'width': 1},
-    opacity=0.8
-)
+fig3.show()
 ```
 
