@@ -10,13 +10,13 @@ execute:
 ---
 
 ```{python}
+#| output: false
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 pd.options.plotting.backend = "plotly"
 pio.templates.default = "plotly_white"
-#--#
 df = pd.read_csv("https://raw.githubusercontent.com/guebin/DV2023/main/posts/NYCTaxi.csv").assign(
     log_trip_duration = lambda df: np.log(df.trip_duration),
     pickup_datetime = lambda df: df.pickup_datetime.apply(pd.to_datetime),
@@ -40,58 +40,35 @@ fig1 = px.density_heatmap(
     y='dayofweek',
     z='speed',
     nbinsx=24,
-    nbinsy=7
+    nbinsy=7,
+    height=400
 )
 fig1.update_layout(
     xaxis_title='pickup 시간',
     yaxis_title='요일',
     coloraxis_colorbar_title='평균 속력'
 )
-```
-
-# 기말고사1-(1),(2)
-
-## Col {Height=50%}
-
-```{python}
-#| title: 요일, 시간에 따른 평균속력 시각
-fig1.show()
-```
-
-## Row {Height=50%}
-
-```{python}
-#| title: 요일,시간에 따른 평균이동거리 시각화 
+#--#
 tidydata_dist = df.groupby(['pickup_hour', 'dayofweek']).dist.mean().reset_index()
 tidydata_dist['dayofweek'] = tidydata_dist['dayofweek'].map({0:'월', 1:'화', 2:'수', 3:'목', 4:'금', 5:'토', 6:'일'})
 #--#
-fig_dist = px.density_heatmap(
+fig2 =px.density_heatmap(
     data_frame=tidydata_dist,
     x='pickup_hour',
     y='dayofweek',
     z='dist',
     nbinsx=24,
-    nbinsy=7
+    nbinsy=7,
+    height=350
 )
-fig_dist.update_layout(
-    xaxis_title='시간',
+fig2.update_layout(
+    xaxis_title='ㅐ 시간',
     yaxis_title='요일',
     coloraxis_colorbar_title='평균 이동 거리'
-)
-fig_dist.show()
-```
-
-# 기말고사1-(3)
-
-## Column {width=100%}
-
-```{python}
-#| title: 속력별 경로 시각화 
-import pandas as pd
-import plotly.express as px
+) 
+#--#
 pcol = ['pickup_datetime', 'pickup_longitude', 'pickup_latitude', 'pickup_hour']
 dcol = ['dropoff_datetime', 'dropoff_longitude', 'dropoff_latitude', 'dropoff_hour']
-#--#
 def transform(df):
     pickup = df.loc[:, ['id']+pcol].set_axis(['id', 'datetime', 'longitude', 'latitude', 'hour'], axis=1).assign(type='pickup')
     dropoff = df.loc[:, ['id']+dcol].set_axis(['id', 'datetime', 'longitude', 'latitude', 'hour'], axis=1).assign(type='dropoff')
@@ -99,35 +76,56 @@ def transform(df):
 df_left = df_small.drop(pcol+dcol, axis=1)
 df_right = pd.concat([transform(df) for i, df in df_small.groupby('id')]).reset_index(drop=True)
 df_small2 = df_left.merge(df_right)
-tidydata = df_small2.assign(speed_cut=pd.qcut(df_small2['speed'], 4, labels=['매우느림','조금느림','조금빠름','매우빠름'])).sort_values('speed_cut')
-fig = px.line_mapbox(
-    data_frame=tidydata,
+tidydata_speed = df_small2.assign(speed_cut=pd.qcut(df_small2['speed'], 4, labels=['매우느림','조금느림','조금빠름','매우빠름'])).sort_values('speed_cut')
+#--#
+# fig3 = px.line_mapbox(
+    data_frame=tidydata_speed,
     lat='latitude',
     lon='longitude',
     line_group='id',
     color='speed_cut',
     center={'lat': 40.7322, 'lon': -73.9052},
     mapbox_style='carto-positron',
-    zoom=11
+    zoom=10,
+    width=750,
+    height=600
 )
 scatter_data = px.scatter_mapbox(
-    data_frame=tidydata,
+    data_frame=tidydata_speed,
     lat='latitude',
     lon='longitude',
     size='passenger_count',
     size_max=10,
     color='speed_cut',
     mapbox_style='carto-positron',
-    zoom=11
+    zoom=10,
+    width=750,
+    height=600
 ).data
 for sd in scatter_data:
-    fig.add_trace(sd)
-
-fig.update_traces(
+    fig3.add_trace(sd)
+fig3.update_traces(
     line={'width': 1},
     opacity=0.8
 )
-fig.show(config={'scrollZoom': False})
 ```
 
+# 기말고사1-(1),(2)
+
+```{python}
+#| title: 요일,시간에 따른 평균속력 시각화        
+fig1.show()
+```
+
+```{python}
+#| title: 요일,시간에 따른 평균이동거리 시각화        
+fig2.show()
+```
+
+# 기말고사1-(3)
+
+```{python}
+#| title: 속력별 경로 시각화
+fig3.show((config={'scrollZoom': False})
+```
 
