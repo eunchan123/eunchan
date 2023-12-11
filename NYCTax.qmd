@@ -35,7 +35,7 @@ df_small = df[::100].reset_index(drop=True)
 
 # 기말고사1-(1),(2)
 
-## Row {Height=50%}
+## Row {Height=100%}
 
 ```{python}
 tidydata = df.groupby(['pickup_hour', 'dayofweek']).speed.mean().reset_index()
@@ -58,7 +58,7 @@ fig.update_layout(
 fig.show()
 ```
 
-## Row {Height=50%}
+## Row {Height=100%}
 
 ```{python}
 tidydata_dist = df.groupby(['pickup_hour', 'dayofweek']).dist.mean().reset_index()
