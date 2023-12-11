@@ -5,5 +5,5 @@
 - <https://eunchan123.github.io/eunchan/Energy.html>
 
 데이터 시각화 기말고사 예상문제 풀이
--자료는 NYCTaxi
+- 자료는 NYCTaxi
 - <https://eunchan123.github.io/eunchan/NYCTaxi.html>
