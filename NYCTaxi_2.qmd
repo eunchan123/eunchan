@@ -35,9 +35,10 @@ df_small = df[::100].reset_index(drop=True)
 
 # 기말고사1-(1),(2)
 
-## Row {Height=100%}
+## Row {Height=50%}
 
 ```{python}
+#| title: 요일, 시간에 따른 평균속력 시각
 tidydata = df.groupby(['pickup_hour', 'dayofweek']).speed.mean().reset_index()
 tidydata['dayofweek'] = tidydata['dayofweek'].map({0:'월', 1:'화', 2:'수', 3:'목', 4:'금', 5:'토', 6:'일'})
 #--#
@@ -58,9 +59,10 @@ fig.update_layout(
 fig.show()
 ```
 
-## Row {Height=100%}
+## Row {Height=50%}
 
 ```{python}
+#| title: 요일,시간에 따른 평균이동거리 시각화 
 tidydata_dist = df.groupby(['pickup_hour', 'dayofweek']).dist.mean().reset_index()
 tidydata_dist['dayofweek'] = tidydata_dist['dayofweek'].map({0:'월', 1:'화', 2:'수', 3:'목', 4:'금', 5:'토', 6:'일'})
 #--#
@@ -86,6 +88,7 @@ fig_dist.show()
 ## Column {width=100%}
 
 ```{python}
+#| title: 속력별 경로 시각화 
 import pandas as pd
 import plotly.express as px
 pcol = ['pickup_datetime', 'pickup_longitude', 'pickup_latitude', 'pickup_hour']
