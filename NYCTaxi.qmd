@@ -59,7 +59,7 @@ fig2 =px.density_heatmap(
     height=350
 )
 fig2.update_layout(
-    xaxis_title='ㅐ 시간',
+    xaxis_title='pickup 시간',
     yaxis_title='요일',
     coloraxis_colorbar_title='평균 이동 거리'
 ) 
